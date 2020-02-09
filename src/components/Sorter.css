@@ -1,6 +1,7 @@
 .array-container {
   position: absolute;
   left: 100px;
+  overflow-x: auto;
   /* top: 100px; */
 }
 
@@ -8,4 +9,8 @@
   width: 2px;
   display: inline-block;
   margin: 0 1px;
+}
+
+.bar {
+  display: block
 }
