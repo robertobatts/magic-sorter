@@ -1,3 +1,9 @@
+export function getMergeSortAnimations(unsortedArray) {
+  
+}
+
+
+
 export function mergeSort(unsortedArray) {
   if (unsortedArray.length <= 1) {
     return unsortedArray;
