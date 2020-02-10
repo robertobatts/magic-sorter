@@ -5,12 +5,12 @@ import * as sortingAlgos from '../algorithms/sortingAlgos';
 import './Sorter.css';
 
 const NEUTRAL_COLOR = 'pink';
-const PRIMARY_COLOR = 'deepskyblue';
-const SECONDARY_COLOR = 'red';
+const PRIMARY_COLOR = 'mediumblue';
+const SECONDARY_COLOR = 'tomato';
 
 const SORTED_COLOR = 'springgreen';
 
-const ANIMATION_SPEED_MS = 10;
+const ANIMATION_SPEED_MS = 2;
 
 export default class Sorter extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class Sorter extends React.Component {
 
     this.state = {
       values: [],
-      valuesSize: 50,
+      valuesSize: 300,
       stop: true
     };
   }
@@ -61,17 +61,21 @@ export default class Sorter extends React.Component {
         const color1 = i % 3 === 0 ? PRIMARY_COLOR : NEUTRAL_COLOR;
         const color2 = i % 3 === 0 ? SECONDARY_COLOR : NEUTRAL_COLOR;
         setTimeout(() => {
-          barOneStyle.backgroundColor = color1;
-          barTwoStyle.backgroundColor = color2;
-          this.colorElementIfSorted(jsSortedArray[barOneIdx], arrayBars[barOneIdx]);
-          this.colorElementIfSorted(jsSortedArray[barTwoIdx], arrayBars[barTwoIdx]);
+          if (!this.state.stop) {
+            barOneStyle.backgroundColor = color1;
+            barTwoStyle.backgroundColor = color2;
+            this.colorElementIfSorted(jsSortedArray[barOneIdx], arrayBars[barOneIdx]);
+            this.colorElementIfSorted(jsSortedArray[barTwoIdx], arrayBars[barTwoIdx]);
+          }
         }, i * ANIMATION_SPEED_MS);
       } else {
         setTimeout(() => {
-          const [barOneIdx, newValue] = animations[i];
-          const barOneStyle = arrayBars[barOneIdx].style;
-          barOneStyle.height = `${this.getHeight(newValue)}px`;
-          this.colorElementIfSorted(jsSortedArray[barOneIdx], arrayBars[barOneIdx]);
+          if (!this.state.stop) {
+            const [barOneIdx, newValue] = animations[i];
+            const barOneStyle = arrayBars[barOneIdx].style;
+            barOneStyle.height = `${this.getHeight(newValue)}px`;
+            this.colorElementIfSorted(jsSortedArray[barOneIdx], arrayBars[barOneIdx]);
+          }
         }, i * ANIMATION_SPEED_MS);
       }
     }
@@ -103,7 +107,7 @@ export default class Sorter extends React.Component {
   render() {
     return (
       <>
-        <div className="array-container">
+        <div className="container">
           <div className="bar">
             <Button onClick={() => this.resetArray()} variant="contained" color="primary">Generate new array</Button>
             <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
@@ -112,17 +116,19 @@ export default class Sorter extends React.Component {
               <Button>Something else sort</Button>
             </ButtonGroup>
           </div>
-          {this.state.values.map((value, idx) => (
-            <div
-              className="array-bar"
-              value={value}
-              key={idx}
-              style={{
-                backgroundColor: NEUTRAL_COLOR,
-                height: `${this.getHeight(value)}px`,
-                width: `${500/this.state.values.length}px`
-            }}/>
-          ))}
+          <div className="array-container">
+            {this.state.values.map((value, idx) => (
+              <div
+                className="array-bar"
+                value={value}
+                key={idx}
+                style={{
+                  backgroundColor: NEUTRAL_COLOR,
+                  height: `${this.getHeight(value)}px`,
+                  width: `${500/this.state.values.length}px`
+              }}/>
+            ))}
+          </div>
         </div>
       </>
     );

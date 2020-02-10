@@ -1,8 +1,18 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
 .array-container {
   position: absolute;
-  left: 100px;
+  bottom: 0;
   overflow-x: auto;
-  /* top: 100px; */
+  white-space: nowrap;
+  width: auto;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .array-bar {
@@ -11,5 +21,6 @@
 }
 
 .bar {
-  display: block
+  top: 0;
+  position: fixed;
 }
