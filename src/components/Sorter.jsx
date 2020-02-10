@@ -1,6 +1,8 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
 import * as sortingAlgos from '../algorithms/sortingAlgos';
 import './Sorter.css';
 
@@ -12,13 +14,15 @@ const SORTED_COLOR = 'springgreen';
 
 const ANIMATION_SPEED_MS = 2;
 
+const DEFAULT_ARRAY_SIZE = 100;
+
 export default class Sorter extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       values: [],
-      valuesSize: 300,
+      valuesSize: DEFAULT_ARRAY_SIZE,
       stop: true
     };
   }
@@ -82,6 +86,9 @@ export default class Sorter extends React.Component {
   }
 
   colorElementIfSorted(correctValue, element) {
+    if (!element) {
+      return;
+    }
     if (correctValue == element.style.height.slice(0, -2)) {
       setTimeout(() => {
         element.style.backgroundColor = SORTED_COLOR;
@@ -104,12 +111,33 @@ export default class Sorter extends React.Component {
     }
   }
 
+  handleChangeSize(newSize) {
+    this.setState({valuesSize: newSize});
+  }
+
   render() {
     return (
       <>
         <div className="container">
           <div className="bar">
             <Button onClick={() => this.resetArray()} variant="contained" color="primary">Generate new array</Button>
+            <div className="margin"/>
+            <div className="slider">
+              <Typography id="discrete-slider" gutterBottom>
+                Array Size
+              </Typography>
+              <Slider
+                defaultValue={DEFAULT_ARRAY_SIZE}
+                aria-labelledby="discrete-slider"
+                valueLabelDisplay="auto"
+                onChange={(event, size) => this.handleChangeSize(size)}
+                step={30}
+                marks
+                min={10}
+                max={200}
+              />
+            </div>
+            <div className="margin"/>
             <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
               <Button onClick={() => this.sort(this.mergeSort.bind(this))}>Merge Sort</Button>
               <Button>Quick Sort</Button>
