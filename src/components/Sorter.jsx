@@ -35,8 +35,8 @@ export default class Sorter extends React.Component {
   resetArray() {
     this.clearAnimations();
     const newValues = [];
-    for (let i = 0; i <= this.state.valuesSize; ++i) {
-      newValues.push(randomIntFromInterval(5, 700));
+    for (let i = 0; i < this.state.valuesSize; ++i) {
+      newValues.push(randomIntFromInterval(5, window.innerHeight - 70));
     }
     this.setState({stop: true});
     this.setState({values: newValues}, () => this.resetArrayBarsColor());
@@ -123,7 +123,9 @@ export default class Sorter extends React.Component {
   }
 
   handleChangeSize(newSize) {
-    this.setState({valuesSize: newSize}, () => this.resetArray());
+    if (newSize !== this.state.valuesSize) {
+      this.setState({valuesSize: newSize}, () => this.resetArray());
+    }
   }
 
   handleChangeSpeed(newSpeed) {
@@ -147,7 +149,7 @@ export default class Sorter extends React.Component {
                 aria-labelledby="size-slider"
                 valueLabelDisplay="auto"
                 onChange={(event, size) => this.handleChangeSize(size)}
-                step={20}
+                step={10}
                 marks
                 min={20}
                 max={300}
@@ -184,7 +186,7 @@ export default class Sorter extends React.Component {
                 style={{
                   backgroundColor: NEUTRAL_COLOR,
                   height: `${this.getHeight(value)}px`,
-                  width: `${500/this.state.values.length}px`
+                  width: `${Math.floor(650/this.state.values.length)}px`
               }}/>
             ))}
           </div>
