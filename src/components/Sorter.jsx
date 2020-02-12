@@ -12,7 +12,7 @@ const SECONDARY_COLOR = 'tomato';
 
 const SORTED_COLOR = 'springgreen';
 
-const ANIMATION_SPEED_MS = 2;
+const ANIMATION_SPEED_MS = 1;
 
 const DEFAULT_ARRAY_SIZE = 100;
 
@@ -23,7 +23,8 @@ export default class Sorter extends React.Component {
     this.state = {
       values: [],
       valuesSize: DEFAULT_ARRAY_SIZE,
-      stop: true
+      stop: true,
+      animationSpeed: ANIMATION_SPEED_MS
     };
   }
 
@@ -32,12 +33,20 @@ export default class Sorter extends React.Component {
   }
 
   resetArray() {
+    this.clearAnimations();
     const newValues = [];
     for (let i = 0; i <= this.state.valuesSize; ++i) {
       newValues.push(randomIntFromInterval(5, 700));
     }
     this.setState({stop: true});
     this.setState({values: newValues}, () => this.resetArrayBarsColor());
+  }
+
+  clearAnimations() {
+    let timeOutId = window.setTimeout(function() {}, 0);
+    while (timeOutId--) {
+        window.clearTimeout(timeOutId);
+    }
   }
 
   resetArrayBarsColor() {
@@ -54,7 +63,6 @@ export default class Sorter extends React.Component {
   mergeSort() {
     const jsSortedArray = this.state.values.slice().sort((v1, v2) => v1 - v2);
     const animations = sortingAlgos.getMergeSortAnimations(this.state.values);
-    console.log(animations)
     for (let i = 0; i < animations.length && !this.state.stop; i++) {
       const arrayBars = document.getElementsByClassName('array-bar');
       const isColorChange = i % 3 !== 2;
@@ -71,7 +79,7 @@ export default class Sorter extends React.Component {
             this.colorElementIfSorted(jsSortedArray[barOneIdx], arrayBars[barOneIdx]);
             this.colorElementIfSorted(jsSortedArray[barTwoIdx], arrayBars[barTwoIdx]);
           }
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animationSpeed);
       } else {
         setTimeout(() => {
           if (!this.state.stop) {
@@ -80,7 +88,10 @@ export default class Sorter extends React.Component {
             barOneStyle.height = `${this.getHeight(newValue)}px`;
             this.colorElementIfSorted(jsSortedArray[barOneIdx], arrayBars[barOneIdx]);
           }
-        }, i * ANIMATION_SPEED_MS);
+        }, i * this.state.animationSpeed);
+      }
+      if (i === animations.length - 1) {
+        setTimeout(() => {this.setState({stop: true})}, i*this.state.animationSpeed + 20);
       }
     }
   }
@@ -106,13 +117,17 @@ export default class Sorter extends React.Component {
       if (jsSortedArray[i] == arrayBars[i].getAttribute('value')) {
         setTimeout(() => {
           arrayBars[i].style.backgroundColor = SORTED_COLOR;
-        }, i*ANIMATION_SPEED_MS);
+        }, i*this.state.animationSpeed);
       }
     }
   }
 
   handleChangeSize(newSize) {
-    this.setState({valuesSize: newSize});
+    this.setState({valuesSize: newSize}, () => this.resetArray());
+  }
+
+  handleChangeSpeed(newSpeed) {
+    this.setState({animationSpeed: newSpeed});
   }
 
   render() {
@@ -123,22 +138,39 @@ export default class Sorter extends React.Component {
             <Button onClick={() => this.resetArray()} variant="contained" color="primary">Generate new array</Button>
             <div className="margin"/>
             <div className="slider">
-              <Typography id="discrete-slider" gutterBottom>
+              <Typography id="size-slider" gutterBottom>
                 Array Size
               </Typography>
               <Slider
+                disabled={!this.state.stop}
                 defaultValue={DEFAULT_ARRAY_SIZE}
-                aria-labelledby="discrete-slider"
+                aria-labelledby="size-slider"
                 valueLabelDisplay="auto"
                 onChange={(event, size) => this.handleChangeSize(size)}
-                step={30}
+                step={20}
                 marks
-                min={10}
-                max={200}
+                min={20}
+                max={300}
               />
             </div>
             <div className="margin"/>
-            <ButtonGroup variant="contained" color="primary" aria-label="contained primary button group">
+            <div className="slider">
+              <Typography id="speed-slider" gutterBottom>
+                Animation Speed
+              </Typography>
+              <Slider
+                disabled={!this.state.stop}
+                defaultValue={11 - ANIMATION_SPEED_MS}
+                aria-labelledby="speed-slider"
+                onChange={(event, speed) => this.handleChangeSpeed(11 - speed)}
+                step={1}
+                marks
+                min={1}
+                max={10}
+              />
+            </div>
+            <div className="margin"/>
+            <ButtonGroup disabled={!this.state.stop} variant="contained" color="primary" aria-label="contained primary button group">
               <Button onClick={() => this.sort(this.mergeSort.bind(this))}>Merge Sort</Button>
               <Button>Quick Sort</Button>
               <Button>Something else sort</Button>
@@ -148,7 +180,6 @@ export default class Sorter extends React.Component {
             {this.state.values.map((value, idx) => (
               <div
                 className="array-bar"
-                value={value}
                 key={idx}
                 style={{
                   backgroundColor: NEUTRAL_COLOR,
