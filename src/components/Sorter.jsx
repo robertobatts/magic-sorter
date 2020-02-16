@@ -162,21 +162,17 @@ export default class Sorter extends React.Component {
               </Typography>
               <Slider
                 disabled={!this.state.stop}
-                defaultValue={11 - ANIMATION_SPEED_MS}
+                defaultValue={51 - ANIMATION_SPEED_MS}
                 aria-labelledby="speed-slider"
-                onChange={(event, speed) => this.handleChangeSpeed(11 - speed)}
-                step={1}
+                onChange={(event, speed) => this.handleChangeSpeed(51 - speed)}
+                step={10}
                 marks
                 min={1}
-                max={10}
+                max={50}
               />
             </div>
             <div className="margin"/>
-            <ButtonGroup disabled={!this.state.stop} variant="contained" color="primary" aria-label="contained primary button group">
-              <Button onClick={() => this.sort(this.mergeSort.bind(this))}>Merge Sort</Button>
-              <Button>Quick Sort</Button>
-              <Button>Something else sort</Button>
-            </ButtonGroup>
+            <Button disabled={!this.state.stop} variant="contained" color="primary" onClick={() => this.sort(this.mergeSort.bind(this))}>Merge Sort</Button>
           </div>
           <div className="array-container">
             {this.state.values.map((value, idx) => (
@@ -198,14 +194,4 @@ export default class Sorter extends React.Component {
 
 function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function arraysAreEqual(arrayOne, arrayTwo) {
-  if (arrayOne.length !== arrayTwo.length) return false;
-  for (let i = 0; i < arrayOne.length; i++) {
-    if (arrayOne[i] !== arrayTwo[i]) {
-      return false;
-    }
-  }
-  return true;
 }

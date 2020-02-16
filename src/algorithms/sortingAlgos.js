@@ -32,8 +32,8 @@ function doMerge(
   let i = startIdx;
   let j = middleIdx + 1;
   while (i <= middleIdx && j <= endIdx) {
-    animations.push([i, j]);
-    animations.push([i, j]);
+    animations.push([k, j]);
+    animations.push([k, j]);
     if (auxiliaryArray[i] <= auxiliaryArray[j]) {
       animations.push([k, auxiliaryArray[i]]);
       mainArray[k++] = auxiliaryArray[i++];
