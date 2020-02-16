@@ -8,12 +8,7 @@ import './Sorter.css';
 const NEUTRAL_COLOR = 'pink';
 const PRIMARY_COLOR = 'mediumblue';
 const SECONDARY_COLOR = 'tomato';
-
 const SORTED_COLOR = 'springgreen';
-
-const ANIMATION_SPEED_MS = 1;
-
-const DEFAULT_ARRAY_SIZE = 100;
 
 export default class Sorter extends React.Component {
   constructor(props) {
@@ -22,7 +17,7 @@ export default class Sorter extends React.Component {
     this.state = {
       values: [],
       stop: true,
-      animationSpeed: ANIMATION_SPEED_MS,
+      animationSpeed: 1,
       height: window.innerHeight,
       width: getWidthValue(),
       valuesSize: 30
@@ -136,7 +131,7 @@ export default class Sorter extends React.Component {
   }
 
   handleChangeSpeed(newSpeed) {
-    this.setState({animationSpeed: newSpeed});
+    this.setState({animationSpeed: 71 - newSpeed});
   }
 
   render() {
@@ -168,13 +163,12 @@ export default class Sorter extends React.Component {
               </Typography>
               <Slider
                 disabled={!this.state.stop}
-                defaultValue={61 - ANIMATION_SPEED_MS}
+                defaultValue={70}
                 aria-labelledby="speed-slider"
-                onChange={(event, speed) => this.handleChangeSpeed(61 - speed)}
-                step={10}
-                marks
+                onChange={(event, speed) => this.handleChangeSpeed(speed)}
+                step={7}
                 min={1}
-                max={60}
+                max={70}
               />
             </div>
             <div className="margin"/>
