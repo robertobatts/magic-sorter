@@ -107,11 +107,11 @@ export default class Sorter extends React.Component {
     if (!element) {
       return;
     }
-    if (correctValue == element.style.height.slice(0, -2)) {
-      setTimeout(() => {
-        element.style.backgroundColor = SORTED_COLOR;
-      }, 1);
-    }
+    let color = correctValue == element.style.height.slice(0, -2) ? SORTED_COLOR : NEUTRAL_COLOR;
+    setTimeout(() => {
+      element.style.backgroundColor = color;
+    },  this.state.animationSpeed/2);
+    
   }
 
   getHeight(value) {
@@ -205,6 +205,6 @@ function randomIntFromInterval(min, max) {
 
 function getWidthValue() {
   let newWidth = window.innerWidth >= 200 ? Math.floor(window.innerWidth/5) : 40;
-  newWidth = window.innerWidth >= 1500 ? 300 : newWidth;
+  newWidth = window.innerWidth >= 1500 ? 200 : newWidth;
   return newWidth;
 }
