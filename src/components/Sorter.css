@@ -6,7 +6,7 @@
 }
 
 .array-container {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   overflow-x: auto;
   white-space: nowrap;
