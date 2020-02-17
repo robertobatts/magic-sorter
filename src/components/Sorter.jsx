@@ -10,6 +10,8 @@ const PRIMARY_COLOR = 'mediumblue';
 const SECONDARY_COLOR = 'tomato';
 const SORTED_COLOR = 'springgreen';
 
+const DEFAULT_SPEED_SLIDER_VALUE = 51;
+
 export default class Sorter extends React.Component {
   constructor(props) {
     super(props);
@@ -17,10 +19,10 @@ export default class Sorter extends React.Component {
     this.state = {
       values: [],
       stop: true,
-      animationSpeed: 1,
+      animationSpeed: getSpeedOnHyperbolicScale(DEFAULT_SPEED_SLIDER_VALUE),
       height: window.innerHeight,
       width: getWidthValue(),
-      valuesSize: 30
+      valuesSize: 40
     };
   }
 
@@ -131,7 +133,7 @@ export default class Sorter extends React.Component {
   }
 
   handleChangeSpeed(newSpeed) {
-    this.setState({animationSpeed: 71 - newSpeed});
+    this.setState({animationSpeed: getSpeedOnHyperbolicScale(newSpeed)});
   }
 
   render() {
@@ -163,11 +165,11 @@ export default class Sorter extends React.Component {
               </Typography>
               <Slider
                 disabled={!this.state.stop}
-                defaultValue={70}
+                defaultValue={DEFAULT_SPEED_SLIDER_VALUE}
                 aria-labelledby="speed-slider"
                 onChange={(event, speed) => this.handleChangeSpeed(speed)}
-                step={7}
-                min={1}
+                step={3}
+                min={0}
                 max={70}
               />
             </div>
@@ -196,9 +198,12 @@ function randomIntFromInterval(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-
 function getWidthValue() {
   let newWidth = window.innerWidth >= 200 ? Math.floor(window.innerWidth/5) : 40;
   newWidth = window.innerWidth >= 1500 ? 200 : newWidth;
   return newWidth;
+}
+
+function getSpeedOnHyperbolicScale(speed) {
+  return Math.ceil(72/(0.1*speed + 1) - 8);
 }
