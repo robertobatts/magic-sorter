@@ -33,7 +33,7 @@ export default class Sorter extends React.Component {
   }
 
   handleWindowResize() {
-    this.setState({height: window.innerHeight, width: getWidthValue()}, () => this.resetArray());
+    this.setState({ height: window.innerHeight, width: getWidthValue() }, () => this.resetArray());
   }
 
   resetArray() {
@@ -42,14 +42,14 @@ export default class Sorter extends React.Component {
     for (let i = 0; i < this.state.valuesSize; ++i) {
       newValues.push(randomIntFromInterval(5, this.state.height - 90));
     }
-    this.setState({stop: true});
-    this.setState({values: newValues}, () => this.resetArrayBarsColor());
+    this.setState({ stop: true });
+    this.setState({ values: newValues }, () => this.resetArrayBarsColor());
   }
 
   clearAnimations() {
-    let timeOutId = window.setTimeout(function() {}, 0);
+    let timeOutId = window.setTimeout(function () { }, 0);
     while (timeOutId--) {
-        window.clearTimeout(timeOutId);
+      window.clearTimeout(timeOutId);
     }
   }
 
@@ -61,7 +61,7 @@ export default class Sorter extends React.Component {
   }
 
   sort(sortFunction) {
-    this.setState({stop: false}, () => sortFunction())
+    this.setState({ stop: false }, () => sortFunction())
   }
 
   mergeSort() {
@@ -95,7 +95,7 @@ export default class Sorter extends React.Component {
         }, i * this.state.animationSpeed);
       }
       if (i === animations.length - 1) {
-        setTimeout(() => {this.setState({stop: true})}, i*this.state.animationSpeed + 20);
+        setTimeout(() => { this.setState({ stop: true }) }, i * this.state.animationSpeed + 20);
       }
     }
   }
@@ -107,8 +107,8 @@ export default class Sorter extends React.Component {
     let color = correctValue == element.style.height.slice(0, -2) ? SORTED_COLOR : NEUTRAL_COLOR;
     setTimeout(() => {
       element.style.backgroundColor = color;
-    },  this.state.animationSpeed/2);
-    
+    }, this.state.animationSpeed / 2);
+
   }
 
   getHeight(value) {
@@ -121,19 +121,19 @@ export default class Sorter extends React.Component {
       if (jsSortedArray[i] == arrayBars[i].getAttribute('value')) {
         setTimeout(() => {
           arrayBars[i].style.backgroundColor = SORTED_COLOR;
-        }, i*this.state.animationSpeed);
+        }, i * this.state.animationSpeed);
       }
     }
   }
 
   handleChangeSize(newSize) {
     if (newSize !== this.state.valuesSize) {
-      this.setState({valuesSize: newSize}, () => this.resetArray());
+      this.setState({ valuesSize: newSize }, () => this.resetArray());
     }
   }
 
   handleChangeSpeed(newSpeed) {
-    this.setState({animationSpeed: getSpeedOnHyperbolicScale(newSpeed)});
+    this.setState({ animationSpeed: getSpeedOnHyperbolicScale(newSpeed) });
   }
 
   render() {
@@ -142,23 +142,23 @@ export default class Sorter extends React.Component {
         <div className="container">
           <div className="bar">
             <Button onClick={() => this.resetArray()} variant="contained" color="primary">Generate new array</Button>
-            <div className="margin"/>
+            <div className="margin" />
             <div className="slider">
               <Typography id="size-slider" gutterBottom>
                 Size
               </Typography>
               <Slider
                 disabled={!this.state.stop}
-                defaultValue={this.state.valuesSize}
                 aria-labelledby="size-slider"
                 onChange={(event, size) => this.handleChangeSize(size)}
+                value={this.state.valuesSize}
                 step={10}
                 marks
-                min={20}
+                min={10}
                 max={this.state.width}
               />
             </div>
-            <div className="margin"/>
+            <div className="margin" />
             <div className="slider">
               <Typography id="speed-slider" gutterBottom>
                 Speed
@@ -167,13 +167,13 @@ export default class Sorter extends React.Component {
                 disabled={!this.state.stop}
                 defaultValue={DEFAULT_SPEED_SLIDER_VALUE}
                 aria-labelledby="speed-slider"
-                onChange={(event, speed) => this.handleChangeSpeed(speed)}
+                onChangeCommitted={(event, speed) => this.handleChangeSpeed(speed)}
                 step={3}
                 min={0}
                 max={70}
               />
             </div>
-            <div className="margin"/>
+            <div className="margin" />
             <Button disabled={!this.state.stop} variant="contained" color="primary" onClick={() => this.sort(this.mergeSort.bind(this))}>Merge Sort</Button>
           </div>
           <div className="array-container">
@@ -184,8 +184,8 @@ export default class Sorter extends React.Component {
                 style={{
                   backgroundColor: NEUTRAL_COLOR,
                   height: `${this.getHeight(value)}px`,
-                  width: `${Math.floor(3*this.state.width/this.state.values.length)}px`
-              }}/>
+                  width: `${Math.floor(3 * this.state.width / this.state.values.length)}px`
+                }} />
             ))}
           </div>
         </div>
@@ -199,11 +199,11 @@ function randomIntFromInterval(min, max) {
 }
 
 function getWidthValue() {
-  let newWidth = window.innerWidth >= 200 ? Math.floor(window.innerWidth/5) : 40;
+  let newWidth = window.innerWidth >= 200 ? Math.floor(window.innerWidth / 5) : 40;
   newWidth = window.innerWidth >= 1500 ? 200 : newWidth;
   return newWidth;
 }
 
 function getSpeedOnHyperbolicScale(speed) {
-  return Math.ceil(72/(0.1*speed + 1) - 8);
+  return Math.ceil(72 / (0.1 * speed + 1) - 8);
 }
